@@ -44,10 +44,9 @@
                 <option value="EJB" selected>EJB</option>
                 <option value="Java">Core Java</option>
             </select><br/>
-
             TextArea
             <textarea name="txtArea" rows="4" cols="20">
-This is a form parameters demo!!!!
+                This is a form parameters demo!!!!
             </textarea><br/>
 
             <input type="submit" name="txtB" />
