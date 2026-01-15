@@ -1,6 +1,6 @@
 <%-- 
     Document   : a.jsp
-    Created on : 08-01-2026, 11:15:32
+    Created on : Jan 8, 2026, 11:29:48 AM
     Author     : PC
 --%>
 
@@ -14,10 +14,11 @@
     </head>
     <body>
         <%
-            UserDTO u = (UserDTO)request.getAttribute("user");
+            UserDTO u = (UserDTO)session.getAttribute("user");
             if (u!=null){       
         %>
                 <h1>Welcome, <%=u.getFullName()%> </h1>
+                <a href="MainController?action=logout&">Logout</a>
                 <h2>Bang dieu khien</h2>
                 Tinh nang 1 <br/>
                 Tinh nang 2 <br/>
