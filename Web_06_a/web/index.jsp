@@ -1,6 +1,6 @@
 <%-- 
-    Document   : E403
-    Created on : Jan 19, 2026, 10:33:59 AM
+    Document   : index
+    Created on : Jan 19, 2026, 9:36:59 AM
     Author     : PC
 --%>
 
@@ -12,6 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>403 - Access Denied. Tai khoan cua ban da bi khoa!!!. Vui long lien he lai admin '(>_<)'</h1>
+        <a href="login.jsp">Login</a>
     </body>
 </html>
