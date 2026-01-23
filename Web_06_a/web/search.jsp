@@ -13,6 +13,15 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <style>
+            table,
+            td {
+              border: 1px solid black;
+              border-collapse: collapse;
+              /* xác nhập các đường viền lại với nhau */
+              /*text-align: center;*/
+            }
+        </style>
     </head>
     <body>
         <jsp:include page="welcome.jsp" />

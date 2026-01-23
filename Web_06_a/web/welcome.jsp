@@ -14,12 +14,12 @@
     </head>
     <body>
         <%
-            UserDTO u = (UserDTO)session.getAttribute("user");
-            if (u!=null){       
+            UserDTO u = (UserDTO) session.getAttribute("user");
+            if (u != null) {
         %>
-                <h1>Welcome, <%=u.getFullName()%> </h1>
-                <a href="MainController?action=logout&">Logout</a><br/>
-                <a href="search.jsp">Seach</a>
+            <h1>Welcome, <%=u.getFullName()%> </h1>
+            <a href="MainController?action=logout&">Logout</a><br/>
+            <a href="search.jsp">Seach</a>
         <%  } else {
                 response.sendRedirect("login.jsp");
             }
