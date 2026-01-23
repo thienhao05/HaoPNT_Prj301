@@ -18,7 +18,6 @@ public class UniversityDTO {
     public UniversityDTO() {
     }
 
-    
     public UniversityDTO(String id, String name, String shortName, String description, int foundedYear, String address, String city, String region, String type, int totalStudents, int totalFaculties, boolean isDraft) {
         this.id = id;
         this.name = name;
@@ -129,7 +128,5 @@ public class UniversityDTO {
     public void setIsDraft(boolean isDraft) {
         this.isDraft = isDraft;
     }
-    
-    
-    
+   
 }

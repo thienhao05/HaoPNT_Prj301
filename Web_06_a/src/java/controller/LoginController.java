@@ -33,6 +33,8 @@ public class LoginController extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
+        request.setCharacterEncoding("UTF-8");
+        response.setCharacterEncoding("UTF-8");
         String url = "";
         HttpSession session = request.getSession();
         if(session.getAttribute("user") == null){
@@ -45,7 +47,7 @@ public class LoginController extends HttpServlet {
               
             if(user != null){
                 if(user.isStatus()){
-                    url = "a.jsp";
+                    url = "welcome.jsp";
                     session.setAttribute("user", user);
                 }else{
                     url = "e403.jsp";
@@ -55,7 +57,7 @@ public class LoginController extends HttpServlet {
                 request.setAttribute("message", "Invalid username or password!");
             }
         }else{
-            url = "a.jsp";
+            url = "welcome.jsp";
         }
         
         //chuyen trang
