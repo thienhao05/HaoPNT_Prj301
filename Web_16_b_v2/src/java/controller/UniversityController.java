@@ -12,6 +12,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.UniversityDAO;
 import model.UniversityDTO;
 
@@ -24,22 +25,39 @@ public class UniversityController extends HttpServlet {
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html;charset=UTF-8");
+        String keywords = request.getParameter("keywords");
         String id = request.getParameter("id");
+        if (keywords == null) {
+            keywords = "";
+        }
+        if (id == null) {
+            id = "";
+        }
 
-        if (id != null && !id.isEmpty()) {
-            UniversityDAO udao = new UniversityDAO();
+        System.out.println(keywords);
+        UniversityDAO udao = new UniversityDAO();
+        // Xoa
+        if (!id.isEmpty()) {
             boolean check = udao.softDelete(id);
-            
             if (check) {
-                request.setAttribute("msg", "Đã xóa đại học thành công!");
+                request.setAttribute("msg", "Deleted!");
             } else {
-                request.setAttribute("error", "Lỗi hệ thống: Không thể xóa ID " + id);
+                request.setAttribute("msg", "Error, can not delete: " + id);
             }
         }
 
-        // Bí quyết ở đây: Gọi lại hàm doSearch để nó tự lấy lại danh sách và forward về đúng trang JSP!
-        doSearch(request, response);
+        // Tim kiem
+        ArrayList<UniversityDTO> list = new ArrayList<>();
+        if (keywords.trim().length() > 0) {
+            list = new ArrayList(udao.filterByName(keywords));
+        }
+        request.setAttribute("list", list);
+        request.setAttribute("keywords", keywords);
+        String url = "search.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(url);
+        rd.forward(request, response);
     }
 
     protected void doSearch(HttpServletRequest request, HttpServletResponse response)
@@ -47,27 +65,21 @@ public class UniversityController extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
-
         String keywords = request.getParameter("keywords");
         if (keywords == null) {
             keywords = "";
         }
 
+        System.out.println(keywords);
         UniversityDAO udao = new UniversityDAO();
         ArrayList<UniversityDTO> list = new ArrayList<>();
-
         if (keywords.trim().length() > 0) {
-            // Hứng kết quả từ DAO vào biến phụ
-            ArrayList<UniversityDTO> result = new ArrayList(udao.filterByName(keywords));
-            // Kiểm tra null trước khi gán
-            if (result != null) {
-                list = new ArrayList<>(result);
-            }
+            list = new ArrayList(udao.filterByName(keywords));
         }
-
         request.setAttribute("list", list);
         request.setAttribute("keywords", keywords);
-        RequestDispatcher rd = request.getRequestDispatcher("search.jsp"); // Đảm bảo đúng tên file JSP nha
+        String url = "search.jsp";
+        RequestDispatcher rd = request.getRequestDispatcher(url);
         rd.forward(request, response);
     }
 

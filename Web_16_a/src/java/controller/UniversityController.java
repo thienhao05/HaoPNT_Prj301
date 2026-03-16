@@ -12,25 +12,26 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.UniversityDAO;
 import model.UniversityDTO;
 
 /**
  *
- * @author tungi
+ * @author
  */
 public class UniversityController extends HttpServlet {
 
     protected void doDelete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         request.setCharacterEncoding("UTF-8");
-        
+
         String id = request.getParameter("id");
 
         if (id != null && !id.isEmpty()) {
             UniversityDAO udao = new UniversityDAO();
             boolean check = udao.softDelete(id);
-            
+
             if (check) {
                 request.setAttribute("msg", "Đã xóa đại học thành công!");
             } else {
@@ -183,56 +184,62 @@ public class UniversityController extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        // Thiết lập Encoding để tránh lỗi tiếng Việt
-        request.setCharacterEncoding("UTF-8");
-        response.setCharacterEncoding("UTF-8");
+        HttpSession session = request.getSession(); //Quan trọng nè
+        if (session.getAttribute("user") != null) {
+            // Thiết lập Encoding để tránh lỗi tiếng Việt
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
 
-        String action = request.getParameter("action");
+            String action = request.getParameter("action");
 
-        // Phòng trường hợp action bị null (người dùng truy cập trực tiếp URL)
-        if (action == null || action.isEmpty()) {
-            doSearch(request, response);
-            return;
-        }
-
-        try {
-            switch (action) {
-                case "searchUniversity":
-                    doSearch(request, response);
-                    break;
-
-                case "addUniversity":
-                    doAdd(request, response);
-                    break;
-
-                case "deleteUniversity":
-                    doDelete(request, response);
-                    break;
-
-                case "updateUniversity":
-                    // Khi người dùng nhấn nút "Sửa" ở danh sách -> Đổ dữ liệu ra Form
-                    doUpdate(request, response);
-                    break;
-
-                case "saveUpdateUniversity":
-                    // Khi người dùng nhấn nút "Update" trong Form -> Lưu vào DB
-                    doSaveUpdate(request, response);
-                    break;
-
-                default:
-                    // Nếu action không khớp, mặc định quay về trang search hoặc báo lỗi
-                    request.setAttribute("error", "Hành động không hợp lệ: " + action);
-                    doSearch(request, response);
-                    break;
+            // Phòng trường hợp action bị null (người dùng truy cập trực tiếp URL)
+            if (action == null || action.isEmpty()) {
+                doSearch(request, response);
+                return;
             }
-        } catch (Exception e) {
-            log("Error at UniversityController: " + e.toString());
-            request.setAttribute("error", "Hệ thống đang gặp sự cố, vui lòng thử lại sau.");
-            request.getRequestDispatcher("error.jsp").forward(request, response);
+
+            try {
+                switch (action) {
+                    case "searchUniversity":
+                        doSearch(request, response);
+                        break;
+
+                    case "addUniversity":
+                        doAdd(request, response);
+                        break;
+
+                    case "deleteUniversity":
+                        doDelete(request, response);
+                        break;
+
+                    case "updateUniversity":
+                        // Khi người dùng nhấn nút "Sửa" ở danh sách -> Đổ dữ liệu ra Form
+                        doUpdate(request, response);
+                        break;
+
+                    case "saveUpdateUniversity":
+                        // Khi người dùng nhấn nút "Update" trong Form -> Lưu vào DB
+                        doSaveUpdate(request, response);
+                        break;
+
+                    default:
+                        // Nếu action không khớp, mặc định quay về trang search hoặc báo lỗi
+                        request.setAttribute("error", "Hành động không hợp lệ: " + action);
+                        doSearch(request, response);
+                        break;
+                }
+            } catch (Exception e) {
+                log("Error at UniversityController: " + e.toString());
+                request.setAttribute("error", "Hệ thống đang gặp sự cố, vui lòng thử lại sau.");
+                request.getRequestDispatcher("error.jsp").forward(request, response);
+            }
+        } else {
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *
